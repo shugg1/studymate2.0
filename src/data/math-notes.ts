@@ -19,9 +19,14 @@ export const mathNotes: NoteSection[] = [
       "Lesson 15 - Theory Notes.pdf",
       "Lesson 16 - Theory Notes.pdf",
       "Lesson 17 - Theory Notes.pdf",
+      "Lesson 18 practice",
+      "Lesson 19 theory",
+      "Lesson 19 practice",
+      "Lesson 20 theory",
+      "Lesson 20 practice",
     ],
     summary:
-      "One unit. Three forms of the same parabola. The grid at the top is the whole exam trick: ask which feature you need, then use the form that already shows it.",
+      "One unit. Three forms of the same parabola, then a unique rule from one extra point, then a model that is only true on the interval the object actually uses. The grid is the exam trick: ask which feature you need, then use the form that already shows it.",
     blocks: [
       {
         div: "forms",
@@ -31,6 +36,7 @@ export const mathNotes: NoteSection[] = [
           "Factor form: y = a(x − p)(x − q). Built to show the x-intercepts x = p and x = q.",
           "General form: y = ax² + bx + c. Built to show the y-intercept (0, c) and to feed the quadratic formula.",
           "Do not expand first out of panic. After changing form, expand back and check the three coefficients match.",
+          "A mixed question still uses those forms. Factorise when you need the intercepts. Complete the square when you need the turning point. A negative constant by itself does not prove there are no x-intercepts.",
         ],
       },
       {
@@ -91,6 +97,7 @@ export const mathNotes: NoteSection[] = [
           "x² + 8x + 12 = x² + 8x + 16 − 16 + 12 = (x + 4)² − 4. Minimum (−4, −4).",
           "If a is not 1, factor a out of the x terms first. Keep the brackets until the correction has been multiplied — sign errors here lose marks.",
           "If the turning point is above the x-axis and the graph opens up, there are no real x-intercepts. You do not need the formula to know that.",
+          "A negative constant only locates the y-intercept. It does not prove there are no x-intercepts: y = −x² + 12x − 20 still crosses at x = 2 and x = 10. Turning point form does prove it. If the maximum sits below the axis, the graph never reaches y = 0.",
         ],
       },
       {
@@ -103,6 +110,27 @@ export const mathNotes: NoteSection[] = [
           "Nice factors? Factorise. Want the vertex? Complete the square or use −b/2a. Messy numbers? Formula.",
         ],
       },
+      {
+        div: "findrule",
+        heading: "Finding the equation",
+        body: [
+          "The information tells you the form. Two roots mean y = a(x − p)(x − q). A turning point (h, k) means y = a(x − h)² + k. The brackets are fixed before you touch a.",
+          "Substitute a point that is not a root and not the turning point. Both coordinates go in. Solve for a, then write the finished rule.",
+          "Substituting a root gives 0 = 0, which is true for every a. Substituting the turning point again gives k = k. Neither finds a.",
+          "If one root is 0, every rule y = ax(x − q) already has y-intercept (0, 0). Ask for a different point, such as the value at x = 2.",
+          "Two points the same distance either side of the axis give the same equation for a. Check every supplied point. If they predict different y-values, the information is not one quadratic.",
+        ],
+      },
+      {
+        div: "models",
+        heading: "Models on a restricted interval",
+        body: [
+          "Choose the form, find a, then answer the practical question. Ground at x = 0 and x = r means y = ax(x − r). A highest or lowest point (h, k) means y = a(x − h)² + k.",
+          "State the interval the object actually uses. Outside it, the equation need not describe any roof, bridge or cable. A value at an x outside that interval says nothing about the real structure.",
+          "If the vertex is inside the interval, that height is the least or greatest on the span. If the vertex is outside, check the endpoints of the interval. Do not import an off-stage turning point.",
+          "Time starts at release, so x = 0 is the start of the flight. A second solution with x negative is before release. It is not a landing time.",
+        ],
+      },
     ],
     formulas: [
       { div: "tp", name: "Turning point form", formula: "y = a(x − h)² + k", note: "Vertex (h, k), axis x = h" },
@@ -110,12 +138,18 @@ export const mathNotes: NoteSection[] = [
       { div: "formula", name: "General form", formula: "y = ax² + bx + c", note: "Y-intercept (0, c), axis −b/2a" },
       { div: "formula", name: "Quadratic formula", formula: "x = (−b ± √(b² − 4ac)) / 2a" },
       { div: "formula", name: "Discriminant", formula: "Δ = b² − 4ac" },
+      { div: "findrule", name: "From two roots", formula: "y = a(x − p)(x − q)", note: "Substitute a point that is not a root" },
+      { div: "findrule", name: "From a turning point", formula: "y = a(x − h)² + k", note: "Substitute a point that is not the vertex" },
+      { div: "models", name: "Arch through the origin", formula: "y = ax(x − r)", note: "Only on the span you were given" },
+      { div: "models", name: "From a vertex in context", formula: "y = a(x − h)² + k", note: "k is the min or max only if x = h is on the object" },
     ],
     glossary: [
       { div: "tp", term: "Turning point / vertex", def: "The highest or lowest point on the parabola." },
       { div: "tp", term: "Axis of symmetry", def: "Vertical line through the turning point. Mirrors the two arms." },
       { div: "factor", term: "Null factor law", def: "If AB = 0 then A = 0 or B = 0." },
       { div: "formula", term: "Discriminant Δ", def: "b² − 4ac. Positive: two real roots. Zero: one (touch). Negative: none." },
+      { div: "findrule", term: "Multiplier a", def: "The stretch and the direction. Roots or a turning point do not fix it. One extra point does." },
+      { div: "models", term: "Restricted domain", def: "The x-values the real object uses. Outside them, the equation need not describe the object." },
     ],
     worked: [
       {
@@ -142,6 +176,46 @@ export const mathNotes: NoteSection[] = [
         div: "square",
         q: "Complete the square: y = x² + 10x + 31.",
         a: "y = (x + 5)² + 6. Minimum (−5, 6), above the axis, so no x-intercepts.",
+      },
+      {
+        div: "factorise",
+        q: "Factorise fully and state the intercepts of y = 4x² − 12x.",
+        a: "y = 4x(x − 3). Intercepts (0, 0) and (3, 0). The origin is both.",
+      },
+      {
+        div: "factorise",
+        q: "Factorise y = 6x² + 11x + 3.",
+        a: "ac = 18. Split 11x as 9x + 2x. y = (3x + 1)(2x + 3).",
+      },
+      {
+        div: "square",
+        q: "Write y = x² + 6x + 13 in turning point form. How many x-intercepts?",
+        a: "y = (x + 3)² + 4. Minimum (−3, 4), so none.",
+      },
+      {
+        div: "square",
+        q: "The minimum value of y = x² − 10x + c is 6. Find c.",
+        a: "y = (x − 5)² + c − 25, so c − 25 = 6 and c = 31. The minimum (5, 6) is above the axis, so no x-intercepts.",
+      },
+      {
+        div: "findrule",
+        q: "Roots −2 and 3, through (0, −12). Find the equation.",
+        a: "y = a(x + 2)(x − 3). −12 = a(2)(−3) = −6a, so a = 2. y = 2(x + 2)(x − 3).",
+      },
+      {
+        div: "findrule",
+        q: "Turning point (2, −3), through (3, −5). Find the equation, and say max or min.",
+        a: "y = a(x − 2)² − 3. −5 = a − 3, so a = −2. y = −2(x − 2)² − 3, a maximum. Substituting (2, −3) again only gives −3 = −3.",
+      },
+      {
+        div: "models",
+        q: "A roof meets the ground at x = 0 and x = 8 and passes through (2, 6). How high is it at x = 3?",
+        a: "y = ax(x − 8). 6 = a(2)(−6), so a = −1/2 and y = −½x(x − 8). At x = 3, y = 7.5 m. Only 0 ≤ x ≤ 8 is the roof.",
+      },
+      {
+        div: "models",
+        q: "A cable has lowest point (4, 2), passes through (2, 4), and spans 0 ≤ x ≤ 8. Does it stay above 1.5 m?",
+        a: "y = ½(x − 4)² + 2. The vertex is inside the span, so the least height is 2 m. Yes, the whole cable stays above 1.5 m.",
       },
     ],
   },

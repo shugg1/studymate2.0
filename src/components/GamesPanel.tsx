@@ -9,9 +9,10 @@ import { ScopeSelect } from "@/components/ScopeSelect";
 import { Button } from "@/components/ui/button";
 import { Panel, PanelTitle } from "@/components/ui/panel";
 import { questionsFor } from "@/lib/science/bank";
+import { saveQuizResults } from "@/lib/science/store";
 import { useSubject } from "@/lib/science/subject";
 import { catNames, topicsFor } from "@/lib/science/topics";
-import type { Question } from "@/lib/science/types";
+import type { Question, TopicId } from "@/lib/science/types";
 import { questionsForScope } from "@/lib/science/units";
 import { shuffle } from "@/lib/utils";
 
@@ -149,6 +150,30 @@ function Flashcards() {
             <span className="mt-3 text-lg font-bold">{show ? answer : card.q}</span>
             <span className="mt-3 text-sm text-secondary">{show ? "Hide" : "Reveal"}</span>
           </button>
+          {show && (
+            <div className="mt-3 flex gap-2">
+              <Button
+                onClick={() => {
+                  saveQuizResults([{ cat: card.cat as TopicId, q: card.q, correct: false }]);
+                  setI((n) => (n + 1) % cards.length);
+                  setShow(false);
+                }}
+              >
+                Not yet
+              </Button>
+              <Button
+                variant="action"
+                className="ml-auto"
+                onClick={() => {
+                  saveQuizResults([{ cat: card.cat as TopicId, q: card.q, correct: true }]);
+                  setI((n) => (n + 1) % cards.length);
+                  setShow(false);
+                }}
+              >
+                Knew it
+              </Button>
+            </div>
+          )}
           <div className="mt-3 flex gap-2">
             <Button
               onClick={() => {
@@ -214,6 +239,7 @@ function SpeedRound() {
   function answer(opt: string) {
     if (!active || !current) return;
     const right = opt === (Array.isArray(current.a) ? current.a[0] : current.a);
+    saveQuizResults([{ cat: current.cat as TopicId, q: current.q, correct: right }]);
     if (right) {
       setScore((s) => s + 1);
       setStreak((s) => s + 1);

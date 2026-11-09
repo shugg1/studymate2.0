@@ -112,6 +112,30 @@ export const MATCH_SETS: { id: TopicId | "mix"; label: string; pairs: MatchPair[
     ],
   },
   {
+    id: "findrule",
+    label: "Finding the equation",
+    pairs: [
+      { term: "Two roots and a point", def: "y = a(x − p)(x − q), then substitute the extra point" },
+      { term: "Turning point and a point", def: "y = a(x − h)² + k, then substitute the extra point" },
+      { term: "Substitute a root", def: "Gives 0 = 0, so it does not find a" },
+      { term: "Substitute the vertex again", def: "Gives k = k, so it does not find a" },
+      { term: "A root at 0", def: "The y-intercept is already (0, 0) for every a" },
+      { term: "Points disagree", def: "The information is not one quadratic" },
+    ],
+  },
+  {
+    id: "models",
+    label: "Models",
+    pairs: [
+      { term: "Ground at 0 and r", def: "y = ax(x − r), only on the given span" },
+      { term: "Vertex given", def: "y = a(x − h)² + k" },
+      { term: "Vertex inside the interval", def: "That height is the min or max of the real object" },
+      { term: "Vertex outside the interval", def: "Check the endpoints, not the off-stage vertex" },
+      { term: "x outside the domain", def: "The equation need not describe the real object there" },
+      { term: "Negative time root", def: "Before release, so it is not a landing time" },
+    ],
+  },
+  {
     id: "probability",
     label: "Probability",
     pairs: [

@@ -31,6 +31,8 @@ export type TopicId =
   | "factorising"
   | "completedsquare"
   | "quadraticformula"
+  | "findrule"
+  | "models"
   | "probability"
   | "measurement";
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Panel, PanelTitle } from "@/components/ui/panel";
-import { clearStats, loadQuestionStats, loadStats } from "@/lib/science/store";
+import { clearStats, loadQuestionStats, loadStats, subscribeProgress } from "@/lib/science/store";
 import { useSubject } from "@/lib/science/subject";
 import { catNames, topicsFor } from "@/lib/science/topics";
 import type { CatStats, TopicId } from "@/lib/science/types";
@@ -27,8 +27,12 @@ export function PerformancePanel() {
   }, [subject]);
 
   useEffect(() => {
-    setStats(loadStats());
-    setQStats(loadQuestionStats());
+    function load() {
+      setStats(loadStats());
+      setQStats(loadQuestionStats());
+    }
+    load();
+    return subscribeProgress(load);
   }, [tick]);
 
   function reset() {
@@ -46,8 +50,8 @@ export function PerformancePanel() {
         title="Progress"
         description={
           subject === "maths"
-            ? "Each unit is split into parts. Amber and red need another look. Tap a part to see its questions."
-            : "Weak areas show amber or red. Tap a topic to see every question. Games and quizzes both write here."
+            ? "Kept on this device. Close the tab and open StudyMate again in this browser — the scores are still here. Amber and red need another look."
+            : "Kept on this device. Close the tab and open StudyMate again in this browser — the scores are still here. Games and quizzes both write here."
         }
       />
       {subject === "maths" ? (

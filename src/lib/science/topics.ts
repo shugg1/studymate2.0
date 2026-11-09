@@ -23,6 +23,8 @@ export const MATHS_TOPICS: TopicId[] = [
   "factorising",
   "completedsquare",
   "quadraticformula",
+  "findrule",
+  "models",
   "probability",
   "measurement",
 ];
@@ -53,6 +55,8 @@ export const catNames: Record<TopicId, string> = {
   factorising: "Factorising",
   completedsquare: "Completing the square",
   quadraticformula: "General form & formula",
+  findrule: "Finding the equation",
+  models: "Models in context",
   probability: "Probability",
   measurement: "Measurement",
 };
@@ -77,6 +81,8 @@ export const topicBlurb: Record<TopicId, string> = {
   factorising: "Monic pairs, DOTS, perfect squares, non-monic ac method.",
   completedsquare: "Rewrite general form to reveal the turning point.",
   quadraticformula: "ax² + bx + c, axis −b/2a, discriminant and roots.",
+  findrule: "One extra point finds a. A root or the turning point itself does not.",
+  models: "Build the rule, then answer only on the interval the object actually uses.",
   probability: "Venn diagrams, two-way tables, trees, the addition rule, and conditional probability.",
   measurement: "Composite area, surface area, volume, spheres, and limits of accuracy.",
 };

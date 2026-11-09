@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ScopeSelect } from "@/components/ScopeSelect";
 import { Button } from "@/components/ui/button";
 import { Panel, PanelTitle } from "@/components/ui/panel";
-import { saveQuizResults } from "@/lib/science/store";
+import { replaceQuizResult, type ProgressUpdate } from "@/lib/science/store";
 import { useSubject } from "@/lib/science/subject";
 import { catNames, topicsFor } from "@/lib/science/topics";
 import type { Question, TopicId } from "@/lib/science/types";
@@ -23,8 +23,36 @@ export function QuizPanel({ initialTopic = "all" }: { initialTopic?: string }) {
   const [score, setScore] = useState<number | null>(null);
   const itemsRef = useRef(items);
   const submittedRef = useRef(submitted);
+  const recorded = useRef<Map<number, ProgressUpdate>>(new Map());
+  const flushRef = useRef<() => void>(() => {});
   itemsRef.current = items;
   submittedRef.current = submitted;
+
+  function remember(index: number, q: QuizItem, userAns: string) {
+    const next: ProgressUpdate = {
+      cat: q.cat as TopicId,
+      q: q.q,
+      correct: answersMatch(userAns, q.a),
+    };
+    replaceQuizResult(recorded.current.get(index) ?? null, next);
+    recorded.current.set(index, next);
+  }
+
+  flushRef.current = () => {
+    itemsRef.current.forEach((q, i) => {
+      if (!q.answered || recorded.current.has(i)) return;
+      remember(i, q, q.userAns || "");
+    });
+  };
+
+  useEffect(() => {
+    const flush = () => flushRef.current();
+    window.addEventListener("pagehide", flush);
+    return () => {
+      window.removeEventListener("pagehide", flush);
+      flush();
+    };
+  }, []);
 
   useEffect(() => {
     setScope(scopeKeyForTopic(initialTopic));
@@ -35,6 +63,7 @@ export function QuizPanel({ initialTopic = "all" }: { initialTopic?: string }) {
   function start() {
     const pool = shuffle(questionsForScope(scope, subject));
     const n = Math.min(length, pool.length);
+    recorded.current = new Map();
     setItems(pool.slice(0, n).map((q) => ({ ...q, options: q.options ? shuffle(q.options) : q.options })));
     setSubmitted(false);
     submittedRef.current = false;
@@ -45,17 +74,11 @@ export function QuizPanel({ initialTopic = "all" }: { initialTopic?: string }) {
   function submit() {
     if (submittedRef.current) return;
     submittedRef.current = true;
+    flushRef.current();
     const curr = itemsRef.current;
-    const updates = curr
-      .filter((q) => q.answered)
-      .map((q) => ({
-        cat: q.cat as TopicId,
-        q: q.q,
-        correct: answersMatch(q.userAns || "", q.a),
-      }));
-    if (updates.length) saveQuizResults(updates);
+    const updates = curr.filter((q) => q.answered);
     setSubmitted(true);
-    setScore(updates.filter((u) => u.correct).length);
+    setScore(updates.filter((q) => answersMatch(q.userAns || "", q.a)).length);
     setRemain(0);
   }
 
@@ -81,7 +104,7 @@ export function QuizPanel({ initialTopic = "all" }: { initialTopic?: string }) {
       <PanelTitle
         kicker="Test"
         title="Smart quizzes"
-        description={`${available} questions in this pick. Results save to Progress. Exam mode adds a clock and auto-submits.`}
+        description={`${available} questions in this pick. Each answer is kept on this device as you go. Close the tab and it is still in Progress.`}
       />
       <div className="flex flex-wrap gap-3">
         {subject === "maths" ? (
@@ -137,7 +160,7 @@ export function QuizPanel({ initialTopic = "all" }: { initialTopic?: string }) {
         <div className="mt-6 space-y-4">
           {score !== null && (
             <div className="rounded-[var(--radius-sm)] border border-success/40 bg-success/10 px-4 py-3 text-success">
-              Saved {score} / {items.filter((q) => q.answered).length} correct. Check Progress for weak spots.
+              Saved on this device: {score} / {items.filter((q) => q.answered).length} correct. It stays in Progress after you close the tab.
             </div>
           )}
           {items.map((q, i) => {
@@ -170,6 +193,7 @@ export function QuizPanel({ initialTopic = "all" }: { initialTopic?: string }) {
                             setItems((prev) =>
                               prev.map((item, idx) => (idx === i ? { ...item, userAns: opt, answered: true } : item)),
                             );
+                            remember(i, q, opt);
                           }}
                           className={[
                             "w-full rounded-[var(--radius-sm)] border px-4 py-3 text-left text-sm font-semibold transition-colors",
@@ -196,8 +220,12 @@ export function QuizPanel({ initialTopic = "all" }: { initialTopic?: string }) {
                     onChange={(e) => {
                       const value = e.target.value;
                       setItems((prev) =>
-                        prev.map((item, idx) => (idx === i ? { ...item, userAns: value, answered: true } : item)),
+                        prev.map((item, idx) => (idx === i ? { ...item, userAns: value, answered: value.trim().length > 0 } : item)),
                       );
+                    }}
+                    onBlur={(e) => {
+                      if (submitted || !e.target.value.trim()) return;
+                      remember(i, q, e.target.value);
                     }}
                   />
                 )}
@@ -219,7 +247,7 @@ export function QuizPanel({ initialTopic = "all" }: { initialTopic?: string }) {
           })}
           {!submitted && (
             <Button variant="action" size="full" onClick={submit}>
-              Submit answers and save progress
+              Submit and mark
             </Button>
           )}
         </div>

@@ -90,6 +90,7 @@ export function SkateLab() {
                 setPlaying(false);
                 setT(Number(e.target.value));
               }}
+              style={{ caretColor: "transparent" }}
               className="mt-1 w-full accent-primary"
             />
           </label>
@@ -99,7 +100,8 @@ export function SkateLab() {
                 Mass
                 <span className="font-mono text-primary">{mass} kg</span>
               </span>
-              <input type="range" min={40} max={100} step={5} value={mass} onChange={(e) => setMass(Number(e.target.value))} className="mt-1 w-full accent-primary" />
+              <input type="range" min={40} max={100} step={5} value={mass} onChange={(e) => setMass(Number(e.target.value))} style={{ caretColor: "transparent" }}
+              className="mt-1 w-full accent-primary" />
             </label>
             <label className="block text-xs font-semibold">
               <span className="flex justify-between">
@@ -113,7 +115,8 @@ export function SkateLab() {
                 step={0.05}
                 value={friction}
                 onChange={(e) => setFriction(Number(e.target.value))}
-                className="mt-1 w-full accent-primary"
+                style={{ caretColor: "transparent" }}
+              className="mt-1 w-full accent-primary"
               />
             </label>
           </div>

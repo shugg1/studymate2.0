@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MATCH_SETS } from "@/data/match-pairs";
 import { Button } from "@/components/ui/button";
 import { saveQuizResults } from "@/lib/science/store";
@@ -25,11 +25,13 @@ export function MatchGame() {
   const [matched, setMatched] = useState<string[]>([]);
   const [wrong, setWrong] = useState<string[]>([]);
   const [misses, setMisses] = useState(0);
+  const saved = useRef(false);
 
   const pack = packs.find((s) => s.id === setId) ?? packs[0]!;
   const done = left.length > 0 && matched.length === left.length;
 
   function start() {
+    saved.current = false;
     const cards: Card[] = pack.pairs.flatMap((p, i) => [
       { id: `t-${i}`, text: p.term, pair: String(i), side: "term" as const },
       { id: `d-${i}`, text: p.def, pair: String(i), side: "def" as const },
@@ -41,6 +43,19 @@ export function MatchGame() {
     setWrong([]);
     setMisses(0);
   }
+
+  useEffect(() => {
+    if (!done || saved.current) return;
+    saved.current = true;
+    const cat: TopicId = pack.id === "mix" ? "physics" : (pack.id as TopicId);
+    saveQuizResults(
+      pack.pairs.map((p) => ({
+        cat,
+        q: `Match: ${p.term}`,
+        correct: true,
+      })),
+    );
+  }, [done, pack]);
 
   function tap(card: Card) {
     if (matched.includes(card.id) || done) return;
@@ -62,18 +77,6 @@ export function MatchGame() {
       setPick(null);
       window.setTimeout(() => setWrong([]), 450);
     }
-  }
-
-  function save() {
-    if (!done) return;
-    const cat: TopicId = pack.id === "mix" ? "physics" : pack.id;
-    saveQuizResults(
-      pack.pairs.map((p) => ({
-        cat,
-        q: `Match: ${p.term}`,
-        correct: true,
-      })),
-    );
   }
 
   const remaining = useMemo(() => left.filter((c) => !matched.includes(c.id)).length, [left, matched]);
@@ -108,12 +111,9 @@ export function MatchGame() {
             <Column cards={right} pick={pick} matched={matched} wrong={wrong} onTap={tap} />
           </div>
           {done && (
-            <div className="mt-4 rounded-[var(--radius-sm)] border border-success/40 bg-success/10 px-4 py-3 text-sm">
-              Set complete with {misses} misses.
-              <Button variant="action" size="sm" className="ml-3" onClick={save}>
-                Save as revision
-              </Button>
-            </div>
+            <p className="mt-4 rounded-[var(--radius-sm)] border border-success/40 bg-success/10 px-4 py-3 text-sm text-success">
+              Set complete with {misses} misses. Saved on this device.
+            </p>
           )}
         </>
       )}

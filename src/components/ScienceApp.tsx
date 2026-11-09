@@ -35,6 +35,7 @@ const TABS: { id: Tab; label: string; icon: typeof BookOpenText }[] = [
 ];
 
 const SUBJECT_KEY = "studymate-subject";
+const TAB_KEY = "studymate-tab";
 
 export function ScienceApp() {
   const [subject, setSubject] = useState<SubjectId>("science");
@@ -49,6 +50,8 @@ export function ScienceApp() {
     try {
       const stored = localStorage.getItem(SUBJECT_KEY);
       if (stored === "science" || stored === "maths") setSubject(stored);
+      const storedTab = localStorage.getItem(TAB_KEY);
+      if (storedTab && TABS.some((item) => item.id === storedTab)) setTab(storedTab as Tab);
     } catch {
       /* ignore */
     }
@@ -59,6 +62,15 @@ export function ScienceApp() {
     setQuizTopic("all");
     try {
       localStorage.setItem(SUBJECT_KEY, id);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function chooseTab(id: Tab) {
+    setTab(id);
+    try {
+      localStorage.setItem(TAB_KEY, id);
     } catch {
       /* ignore */
     }
@@ -80,7 +92,7 @@ export function ScienceApp() {
               <NavBtn
                 key={item.id}
                 active={tab === item.id}
-                onClick={() => setTab(item.id)}
+                onClick={() => chooseTab(item.id)}
                 icon={<item.icon className="size-4" />}
                 label={item.label}
               />
@@ -100,7 +112,7 @@ export function ScienceApp() {
                 <NavBtn
                   key={item.id}
                   active={tab === item.id}
-                  onClick={() => setTab(item.id)}
+                  onClick={() => chooseTab(item.id)}
                   icon={<item.icon className="size-4" />}
                   label={item.label}
                   compact
@@ -115,7 +127,7 @@ export function ScienceApp() {
                 <NotesPanel
                   onDrill={(topic) => {
                     setQuizTopic(topic);
-                    setTab("quizzes");
+                    chooseTab("quizzes");
                   }}
                 />
               )}

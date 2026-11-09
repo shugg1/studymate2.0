@@ -337,4 +337,36 @@ export const MATHS_LEARN: Record<string, LearnPack> = {
     wrong: "Percentage error = 20/220, about 9.1%.",
     fix: "Divide by the actual amount, which is 200 g, not by the amount you poured.",
   },
+  findrule: {
+    method: [
+      "Write the form the information already gives. Two roots: y = a(x − p)(x − q). A turning point: y = a(x − h)² + k.",
+      "Substitute a point that is not a root and not the turning point. Solve that one equation for a.",
+      "Check the finished rule against every point you were given. If two points disagree, it is not one quadratic.",
+    ],
+    prompt: "Roots −2 and 3, and the graph passes through (0, −12). Find the equation.",
+    steps: [
+      "The roots fix the brackets: y = a(x + 2)(x − 3). Leave a unknown.",
+      "Put in (0, −12): −12 = a(2)(−3) = −6a, so a = 2.",
+      "Check the point you used: 2(2)(−3) = −12. The roots still give 0.",
+    ],
+    answer: "y = 2(x + 2)(x − 3).",
+    wrong: "I'll substitute the root x = −2 to find a.",
+    fix: "A root makes both sides 0. That is 0 = 0, which is true for every a. Use a point that is not a root.",
+  },
+  models: {
+    method: [
+      "Pick the form, then find a. Ground at 0 and at r: y = ax(x − r). A vertex (h, k): y = a(x − h)² + k.",
+      "Answer only on the interval you were given. Outside it, the equation need not describe the bridge, cable or roof.",
+      "If the vertex is inside the interval, that height is the min or max. If it is outside, check the endpoints. A solution with x < 0 is not a time after release.",
+    ],
+    prompt: "A roof meets the ground at x = 0 and x = 8 and passes through (2, 6), in metres. How high is it at x = 3?",
+    steps: [
+      "y = ax(x − 8). The point (2, 6): 6 = a(2)(−6) = −12a, so a = −1/2.",
+      "y = −½x(x − 8). At x = 3: y = −½(3)(−5) = 7.5.",
+      "The roof only uses 0 ≤ x ≤ 8. x = 3 is inside that interval, so 7.5 m is a real height of the roof.",
+    ],
+    answer: "7.5 m. The rule is y = −½x(x − 8), and it only describes the roof for 0 ≤ x ≤ 8.",
+    wrong: "The full parabola is also 0 at a negative x, so that is another point where the ball lands.",
+    fix: "Time starts at release. A negative root is before the ball is thrown, so it is not a landing time. Use the root that is after x = 0.",
+  },
 };

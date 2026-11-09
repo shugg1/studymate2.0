@@ -31,12 +31,14 @@ export const MATHS_UNITS: MathsUnit[] = [
     divisions: [
       { id: "forms", short: "Three forms", label: "The three forms", cats: [], lessons: [1], by: "cat" },
       { id: "tp", short: "Turning point", label: "Turning point form", cats: ["tpform"], lessons: [1], by: "cat" },
-      { id: "axes", short: "Axes", label: "Crossing the axes", cats: ["intercepts"], lessons: [3], by: "cat" },
+      { id: "axes", short: "Axes", label: "Crossing the axes", cats: ["intercepts"], lessons: [3, 18], by: "cat" },
       { id: "factor", short: "Factor form", label: "Factor form", cats: ["factorform"], lessons: [4, 6], by: "cat" },
       { id: "expand", short: "Expanding", label: "Expanding", cats: ["expanding"], lessons: [7, 8, 9], by: "cat" },
-      { id: "factorise", short: "Factorising", label: "Factorising", cats: ["factorising"], lessons: [13, 14, 15], by: "cat" },
-      { id: "square", short: "Completing the square", label: "Completing the square", cats: ["completedsquare"], lessons: [16, 17], by: "cat" },
+      { id: "factorise", short: "Factorising", label: "Factorising", cats: ["factorising"], lessons: [13, 14, 15, 18], by: "cat" },
+      { id: "square", short: "Completing the square", label: "Completing the square", cats: ["completedsquare"], lessons: [16, 17, 18], by: "cat" },
       { id: "formula", short: "Formula", label: "General form and the formula", cats: ["quadraticformula"], lessons: [], by: "cat" },
+      { id: "findrule", short: "Find the rule", label: "Finding the equation", cats: ["findrule"], lessons: [19], by: "cat" },
+      { id: "models", short: "Models", label: "Models in context", cats: ["models"], lessons: [20], by: "cat" },
     ],
   },
   {
@@ -78,6 +80,8 @@ const CAT_TO_SCOPE: Record<string, string> = {
   factorising: "div:factorise",
   completedsquare: "div:square",
   quadraticformula: "div:formula",
+  findrule: "div:findrule",
+  models: "div:models",
   probability: "unit:probability",
   measurement: "unit:measurement",
 };
